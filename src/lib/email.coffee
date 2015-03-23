@@ -3,7 +3,7 @@ Email = require '../classes/Email'
 utils = require './utils'
 config = require '../config/config'
 emailConfig = require '../config/email'
-site = config.site or {}
+site = config.site
 
 defaults = ->
     userId: null
@@ -20,7 +20,7 @@ defaults = ->
     globalMergeVars:
       site: site
       private_profile: site.url
-      current_year: 2014
+      current_year: 2015
       links:
         home: site.url + '/'
     content: {}
@@ -31,9 +31,9 @@ userToMandrill = (user) ->
     name: user.name
     email: user.email
     vars:
-      profile: user.url or site.url
+      profile: site.url
       private_profile: site.url
-      avatar: if user.thumb then user.thumb.avatar_small else ''
+      avatar: if user.avatar then user.avatar else ''
   # merge_vars via user object
   _user.vars = _.extend _user.vars, user.vars if user.vars
   _user
@@ -48,17 +48,20 @@ _parseOptions = (options) ->
   options = options or {}
   options = utils.deepDefaults options, defaults()
   options.to = options.to or []
-  options.to = [ options.to ] if not utils.isArray options.to
-
+  if not utils.isArray options.to
+    options.to = [ options.to ]
   if options.user
     options.users.push options.user
-    options.users = _.uniq options.users, false, (user) -> user.username
+    options.users = _.uniq options.users, false, (user) ->
+      user.email
   if options.users and utils.isArray options.users
     options.users.forEach (_user) ->
       _user = userToMandrill _user
       # userVars via options
-      _user.vars = _.extend _user.vars, options.userVars if options.userVars
+      if options.userVars
+        _user.vars = _.extend _user.vars, options.userVars
       options.to.push _user
+      return
   options = _.omit _.extend(options, options.locals), [ 'locals' ]
   options
 

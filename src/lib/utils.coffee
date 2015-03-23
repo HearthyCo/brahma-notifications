@@ -1,42 +1,52 @@
 _ = require 'underscore'
 
 utils =
-  deepDefaults = (target) ->
-    return target if !_.isObject(target)
+  deepDefaults: (target) ->
+    return target if not _.isObject target
 
     i = 1
     length = arguments.length
     while i < length
       defaults = arguments[i]
       for prop of defaults
-        if target[prop]?
+        if target[prop] is undefined
           target[prop] = defaults[prop]
         else if 'object' is typeof target[prop]
           if 'object' is typeof defaults[prop]
-            deepDefaults target[prop], defaults[prop]
+            utils.deepDefaults target[prop], defaults[prop]
       i++
     target
 
-  flattenObject = (obj, delim) ->
+  flattenObject: (obj, delim) ->
     delim = delim or '_'
     _ret = {}
     for key of obj
-      if !obj.hasOwnProperty(key)
-        continue
-      if typeof obj[key] == 'object' and obj[key] != null
-        _flat = flattenObject(obj[key], delim)
+      continue if not obj.hasOwnProperty key
+      if typeof obj[key] is 'object' and obj[key] isnt null
+        _flat = utils.flattenObject(obj[key], delim)
         for next of _flat
-          if !_flat.hasOwnProperty(next)
-            continue
+          continue if not _flat.hasOwnProperty next
           _ret[key + delim + next] = _flat[next]
       else
         _ret[key] = obj[key]
     _ret
 
-  isFunction = (arg) -> 'function' is typeof arg
+  cleanObject: (obj, args) ->
+    return false if not object? and not args?
+    _ret = {}
+    for key in args
+      field = utils.resolve args[key], obj
+      return null if not field?
+      _ret[key] = field
+    _ret
 
-  isObject = (arg) -> '[object Object]' is Object.prototype.toString.call arg
+  resolve = (path, obj) ->
+    path.split('.').reduce (prev, curr) ->
+      prev[curr]
+    , obj or @
 
-  isArray = (arg) -> Array.isArray(arg);
+  isFunction: (arg) -> 'function' is typeof arg
+  isObject: (arg) -> '[object Object]' is Object.prototype.toString.call arg
+  isArray: (arg) -> Array.isArray arg
 
 module.exports = exports = utils

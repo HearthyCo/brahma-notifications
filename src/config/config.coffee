@@ -19,8 +19,5 @@ config =
     email: process.env.CONTACT_EMAIL || 'hola@glue.gl'
     url: process.env.PUBLIC_URL || 'http://hearthy-client-dev.dev01.glue.gl'
     brand: process.env.BRAND || 'Hearthy'
-    twitter: '@hearthytwitter'
-    fb_app_id: '123456789012345'
-    fb_url: ''
 
 module.exports = exports = config

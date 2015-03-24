@@ -60,7 +60,6 @@ utils =
       , obj or @
       return value if value?
 
-
   isFunction: (arg) -> 'function' is typeof arg
   isObject: (arg) -> '[object Object]' is Object.prototype.toString.call arg
   isArray: (arg) -> Array.isArray arg

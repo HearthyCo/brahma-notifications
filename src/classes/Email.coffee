@@ -1,8 +1,8 @@
 _ = require 'underscore'
 moment = require 'moment'
-utils = require'../lib/utils'
+utils = require '../lib/utils'
 mandrillapi = require 'mandrill-api'
-config = require '../config/config'
+config = require '../config/global'
 
 defaultConfig =
   mandrill:
@@ -18,15 +18,12 @@ defaultConfig =
 # @param  {Mixed}  _var Object to parse
 # @return {Array}       An array of vars
 ###
-
 objToMandrillVars = (_var) ->
   _new = []
   if 'object' is typeof _var
     _flat = utils.flattenObject _var, '_'
     _.each _flat, (value, key) ->
-      _new.push
-        name: key
-        content: value
+      _new.push name: key, content: value
     return _new
   _var
 
@@ -43,7 +40,6 @@ objToMandrillVars = (_var) ->
 #
 # @api public
 ###
-
 Email = (options) ->
   # Passing a string will use Email.defaults for everything but template name
   if 'string' is typeof options
@@ -82,10 +78,10 @@ Email::buildOptions = (err, options, callback) ->
   callback = if 'function' == typeof callback then callback else ->
   return callback err if err
   if not utils.isObject options
-    return callback {
+    return callback
       from: 'Email.send'
       key: 'invalid options'
-      message: 'options object is required' }
+      message: 'options object is required'
   if 'string' is typeof options.from
     options.fromName = options.from
     options.fromEmail = options.from
@@ -109,14 +105,17 @@ Email::buildOptions = (err, options, callback) ->
           'the mandrill api key before sending email.'
     options.mandrill = new (mandrillapi.Mandrill)(config.mandrill.apikey)
   options.tags = if utils.isArray options.tags then options.tags else []
-  options.tags.push 'sent:' + moment().format 'YYYY-MM-DD'
+  # This line is commented because mandrill free account have tags limit
+  # (100 tags)
+  # options.tags.push 'sent:' + moment().format 'YYYY-MM-DD'
   options.tags.push @templateName
   options.tags.push 'development' if config.env is 'development'
 
   ### Convert and concat globalMergeVars ###
   if options.globalMergeVars
     options.global_merge_vars = options.global_merge_vars or []
-    options.global_merge_vars.concat objToMandrillVars(options.globalMergeVars)
+    mandrillVars = objToMandrillVars options.globalMergeVars
+    options.global_merge_vars = options.global_merge_vars.concat mandrillVars
   recipients = []
   mergeVars = []
   options.to = if utils.isArray options.to then options.to else [ options.to ]
@@ -148,7 +147,7 @@ Email::buildOptions = (err, options, callback) ->
       vars.push name: 'first_name', content: options.to[i].name.first or ''
       vars.push name: 'last_name', content: options.to[i].name.last or ''
     # Mandrill template
-    vars.concat objToMandrillVars(recipient.vars) if recipient.vars
+    vars = vars.concat objToMandrillVars recipient.vars if recipient.vars
     recipients.push recipient
     mergeVars.push rcpt: recipient.email, vars: vars
     i++

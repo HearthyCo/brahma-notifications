@@ -2,8 +2,10 @@
 
 amqp = require 'amqplib'
 all = (require 'when').all
+actionsList = require './lib/actions'
 utils = require './lib/utils'
-config = require './lib/config'
+config = require './config/global'
+email = require './lib/email'
 
 ###
   AMQP --------------------------------------------------------------
@@ -25,12 +27,13 @@ amqp.connect(config.amqp.url).then (conn) ->
 
 amqpHandler = (msg) ->
   key = msg.fields.routingKey
-  try
-    data = JSON.parse msg.content.toString()
-  catch e
-    console.error e
-  console.log 'AMQP Received:', key, data
 
-  switch key
-    when 'user.register' console.log 'user.register', data
-    when 'user.recover' console.log 'user.recover', data
+  try data = JSON.parse msg.content.toString()
+  catch e then console.error e
+
+  console.log 'AMQP Received:', key
+
+  actions = utils.resolve key, actionsList
+
+  action data for action in actions if actions?
+  console.warn key, 'does not exists in actions' if not actions?

@@ -2,7 +2,7 @@
 
 amqp = require 'amqplib'
 all = (require 'when').all
-actionsList = require './lib/actions'
+eventsList = require './config/events'
 utils = require './lib/utils'
 config = require './config/global'
 email = require './lib/email'
@@ -33,7 +33,7 @@ amqpHandler = (msg) ->
 
   console.log 'AMQP Received:', key
 
-  actions = utils.resolve key, actionsList
+  events = utils.resolve key, eventsList
 
-  action data for action in actions if actions?
-  console.warn key, 'does not exists in actions' if not actions?
+  ev data for ev in events if events?
+  console.warn key, 'does not exists in events' if not events?

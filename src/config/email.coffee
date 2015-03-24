@@ -1,8 +1,8 @@
 ###
 # Email config:
 # locals: Mandrill locals #TODO
-# actions: describes all configuration (template and requiredFields) for each
-# notification.
+# events.properties: describes all configuration (template and requiredFields)
+# for each notification.
 # - template: Mandrill template name
 # - requiredFields is a object that contains a key/path properties.
 #   In utils there are a function (utils.resolve) that change the path by
@@ -22,18 +22,22 @@ config =
         color: '#fff'
         background_color: '#2697de'
         border_color: '#1a7cb7'
-  actions:
-    register:
-      template: 'welcome'
-      requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
-    recover:
-      template: 'recover-password'
-      requiredFields:
-        link: 'vars.link'
-        avatar: 'user.avatar'
-        name: ['user.name', 'user.email']
-    confirm:
-      template: 'email-confirmed'
-      requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
+  events:
+    properties:
+      register:
+        template: 'welcome'
+        requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
+      confirm:
+        template: 'email-confirmed'
+        requiredFields: name: ['user.name', 'user.email']
+      recoverPassword:
+        template: 'recover-password'
+        requiredFields:
+          link: 'vars.link'
+          avatar: 'user.avatar'
+          name: ['user.name', 'user.email']
+      confirmPassword:
+        template: 'password-confirmed'
+        requiredFields: avatar: 'user.avatar', name: ['user.name', 'user.email']
 
 module.exports = exports = config

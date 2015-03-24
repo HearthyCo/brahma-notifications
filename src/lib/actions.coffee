@@ -1,22 +1,14 @@
-async = require 'async'
-conf = require '../config/email'
+email = require './email'
+emailConf = require '../config/email'
+emailActions = emailConf.actions
+# TODO: push = require './push'
 
-sendEmail = (opts) -> (data) ->
-  opts = opts || {}
-
-  to = utils.cleanObject data, email: 'user.email', name: 'user.email'
-  globalMergeVars = utils.cleanObject data, opts.requiredFields
-
-  email.send opts.template,
-    to: to
-    globalMergeVars: globalMergeVars
-  , (err, result, options) ->
-    console.err 'Error sent email:', err if err
-    console.log 'Success sent email:', result if not err
-
+# Define an array with all notifications for each action
+# ie: [ sendEmail opts, sendPush opts, sendCarrierPigeon opts ]
 actions =
   user:
-    register: [ sendEmail conf.actions.register ]
-    recover: [ sendEmail conf.actions.recover ]
+    register: [ email.send emailActions.register ]
+    recover: [ email.send emailActions.recover ]
+    confim: [ email.send emailActions.confirm ]
 
 module.exports = exports = actions

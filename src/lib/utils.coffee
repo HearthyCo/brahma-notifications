@@ -31,19 +31,35 @@ utils =
         _ret[key] = obj[key]
     _ret
 
-  cleanObject: (obj, args) ->
-    return false if not object? and not args?
+  ###
+  # Constructs an object with the key args, solving path values in args in obj
+  # @param  {Object}  obj: Data
+  # @param  {Object}  args: required fields and paths where find them
+  # @return {Object}  Return an object with all required fields
+  ###
+  mkObject: (obj, args) ->
+    return null if not obj? or not args?
     _ret = {}
-    for key in args
+    for key of args
       field = utils.resolve args[key], obj
       return null if not field?
       _ret[key] = field
     _ret
 
-  resolve = (path, obj) ->
-    path.split('.').reduce (prev, curr) ->
-      prev[curr]
-    , obj or @
+  ###
+  # Return value for the path in object
+  # @param  {String, Array} path: Path for the value in obj
+  # @param  {Object}        obj: object in which search path
+  # @return {String}        Return a string with the value for the path param
+  ###
+  resolve: (path, obj) ->
+    path = [path] if not utils.isArray path
+    for p in path
+      value = p.split('.').reduce (prev, curr) ->
+        prev[curr]
+      , obj or @
+      return value if value?
+
 
   isFunction: (arg) -> 'function' is typeof arg
   isObject: (arg) -> '[object Object]' is Object.prototype.toString.call arg

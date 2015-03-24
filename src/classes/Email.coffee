@@ -2,7 +2,7 @@ _ = require 'underscore'
 moment = require 'moment'
 utils = require '../lib/utils'
 mandrillapi = require 'mandrill-api'
-config = require '../config/config'
+config = require '../config/global'
 
 defaultConfig =
   mandrill:
@@ -18,7 +18,6 @@ defaultConfig =
 # @param  {Mixed}  _var Object to parse
 # @return {Array}       An array of vars
 ###
-
 objToMandrillVars = (_var) ->
   _new = []
   if 'object' is typeof _var
@@ -41,7 +40,6 @@ objToMandrillVars = (_var) ->
 #
 # @api public
 ###
-
 Email = (options) ->
   # Passing a string will use Email.defaults for everything but template name
   if 'string' is typeof options

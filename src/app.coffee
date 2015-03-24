@@ -4,7 +4,7 @@ amqp = require 'amqplib'
 all = (require 'when').all
 actionsList = require './lib/actions'
 utils = require './lib/utils'
-config = require './config/config'
+config = require './config/global'
 email = require './lib/email'
 
 ###
@@ -35,4 +35,5 @@ amqpHandler = (msg) ->
 
   actions = utils.resolve key, actionsList
 
-  action data for action in actions
+  action data for action in actions if actions?
+  console.warn key, 'does not exists in actions' if not actions?

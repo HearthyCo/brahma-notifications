@@ -1,4 +1,15 @@
-
+###
+# Email config:
+# locals: Mandrill locals #TODO
+# actions: describes all configuration (template and requiredFields) for each
+# notification.
+# - template: Mandrill template name
+# - requiredFields is a object that contains a key/path properties.
+#   In utils there are a function (utils.resolve) that change the path by
+#   value in the path
+#   If path is an array:
+#     name: ['user.name', 'user.email'] --> name: 'user.name' || 'user.email'
+###
 config =
   locals:
     logo_src: '/images/logo-email.gif'
@@ -14,16 +25,15 @@ config =
   actions:
     register:
       template: 'welcome'
-      requiredFields: subject: 'subject', link: 'link', name: 'user.email'
+      requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
     recover:
       template: 'recover-password'
       requiredFields:
-        subject: 'subject'
-        link: 'link'
+        link: 'vars.link'
         avatar: 'user.avatar'
-        name: 'user.email'
+        name: ['user.name', 'user.email']
     confirm:
       template: 'email-confirmed'
-      requiredFields: subject: 'subject', link: 'link', name: 'user.email'
+      requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
 
 module.exports = exports = config

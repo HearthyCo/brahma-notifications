@@ -77,15 +77,15 @@ prepareSend = (opts) -> (data) ->
 
   if not to? or not globalMergeVars?
     console.error 'Error sent email: Missing params'
-
-  send opts.template,
-    to: to
-    globalMergeVars: globalMergeVars
-  , (err, result, options) ->
-    if err
-      console.error 'Error sent email:', JSON.stringify err
-    else
-      console.log 'Success sent email:', JSON.stringify result
+  else
+    send opts.template,
+      to: to
+      globalMergeVars: globalMergeVars
+    , (err, result, options) ->
+      if err
+        console.error 'Error sent email:', JSON.stringify err
+      else
+        console.log 'Success sent email:', JSON.stringify result
 
 ###
 # Sends an email

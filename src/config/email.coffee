@@ -32,12 +32,9 @@ config =
         requiredFields: name: ['user.name', 'user.email']
       recoverPassword:
         template: 'recover-password'
-        requiredFields:
-          link: 'vars.link'
-          avatar: 'user.avatar'
-          name: ['user.name', 'user.email']
+        requiredFields: link: 'vars.link', name: ['user.name', 'user.email']
       confirmPassword:
         template: 'password-confirmed'
-        requiredFields: avatar: 'user.avatar', name: ['user.name', 'user.email']
+        requiredFields: name: ['user.name', 'user.email']
 
 module.exports = exports = config

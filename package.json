@@ -1,6 +1,6 @@
 {
-  "name": "brahma-chat",
-  "version": "1.0.0",
+  "name": "brahma-notifications",
+  "version": "0.7.0",
   "description": "",
   "main": "src/app.coffee",
   "scripts": {
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git@gitlab.com:brahma/brahma-chat.git"
   },
-  "author": "Ignacio Lago <ignacio@glue.gl>",
+  "author": "Miguel Sanchez <miguel@glue.gl>",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.3.1",

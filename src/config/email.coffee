@@ -8,7 +8,7 @@
 #   In utils there are a function (utils.resolve) that change the path by
 #   value in the path
 #   If path is an array:
-#     name: ['user.name', 'user.email'] --> name: 'user.name' || 'user.email'
+#     name: ['user.name', 'user.email'] --> name: 'user.name' or 'user.email'
 ###
 config =
   locals:

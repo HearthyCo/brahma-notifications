@@ -69,7 +69,7 @@ _parseOptions = (options) ->
 # @return {Function}  Send function
 ###
 prepareSend = (opts) -> (data) ->
-  opts = opts || {}
+  opts = opts or {}
 
   to = utils.mkObject data,
     email: 'user.email', name: ['user.name', 'user.email']

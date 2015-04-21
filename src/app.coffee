@@ -10,16 +10,15 @@ email = require './lib/email'
 ###
   AMQP --------------------------------------------------------------
 ###
-exchange = 'amq.topic'
-keys = ['#']
 
 amqp.connect(config.amqp.url).then (conn) ->
   conn.createChannel().then (ch) ->
-    ok = ch.assertExchange exchange, 'topic', durable: true
+    ok = ch.assertExchange config.amqp.exchange, 'topic', durable: true
     ok = ok.then -> ch.assertQueue '', exclusive: true
     ok = ok.then (qok) ->
       queue = qok.queue
-      t = all keys.map (rk) -> ch.bindQueue queue, exchange, rk
+      t = all config.amqp.keys.map (rk) ->
+        ch.bindQueue queue, config.amqp.exchange, rk
       t.then -> queue
     ok = ok.then (queue) -> ch.consume queue, amqpHandler
     return ok.then -> console.info 'AMQP listening'

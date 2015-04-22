@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('better-console-log')()
+
 amqp = require 'amqplib'
 all = (require 'when').all
 eventsList = require './config/events'

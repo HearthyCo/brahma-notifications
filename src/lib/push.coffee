@@ -5,11 +5,14 @@ http = require 'http'
 # Sends an event to the pushd server.
 sendPush = (evt, payload) ->
   data = JSON.stringify payload
+  console.log 'Data:', data
   post_options =
     host: config.pushd.host
     port: config.pushd.port
     path: '/event/' + evt
     method: 'POST'
+    headers:
+      'Content-Type': 'application/json'
 
   req = http.request post_options, (res) ->
     if res.statusCode >= 400
@@ -22,6 +25,13 @@ sendPush = (evt, payload) ->
 
 exports = module.exports =
 
-  send: (data) ->
-    sendPush 'test', msg: 'Hola mundo!'
+  sendUndelivered: (data) ->
+    console.log 'Send:', data
+    session = data.message.session
+    for i in data.undelivered
+      sendPush i,
+        'title': 'New message'
+        'msg': 'You have unread messages.'
+        'data.type': 'message'
+        'data.session': ''+session
 

@@ -11,6 +11,7 @@ events =
     confirm: [ email.send emailEvents.confirm ]
     recoverPassword: [ email.send emailEvents.recoverPassword ]
     confirmPassword: [ email.send emailEvents.confirmPassword ]
-    pushDemo: [ push.send ]
+  chat:
+    activity: [ push.sendUndelivered ]
 
 module.exports = exports = events

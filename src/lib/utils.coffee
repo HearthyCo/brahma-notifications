@@ -56,7 +56,7 @@ utils =
     path = [path] if not utils.isArray path
     for p in path
       value = p.split('.').reduce (prev, curr) ->
-        prev[curr]
+        prev[curr] if prev
       , obj or @
       return value if value?
 

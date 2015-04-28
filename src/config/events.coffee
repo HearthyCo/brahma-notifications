@@ -13,5 +13,8 @@ events =
     confirmPassword: [ email.send emailEvents.confirmPassword ]
   chat:
     activity: [ push.sendUndelivered ]
+  session:
+    finish: [ push.sendFinished ]
+
 
 module.exports = exports = events

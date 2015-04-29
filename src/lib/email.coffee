@@ -6,25 +6,25 @@ emailConfig = require '../config/email'
 site = config.site
 
 defaults = ->
-    userId: null
-    user: null
-    users: []
-    to: null
-    subject: null
-    title: null
-    body: null
-    from:
-      name: 'Do not reply'
-      email: 'noreply@glue.gl'
-    locals: emailConfig.locals or {}
-    globalMergeVars:
-      site: site
-      private_profile: site.url
-      current_year: new Date().getFullYear()
-      links:
-        home: site.url + '/'
-    content: {}
-    mandrillTemplate: true
+  userId: null
+  user: null
+  users: []
+  to: null
+  subject: null
+  title: null
+  body: null
+  from:
+    name: 'Do not reply'
+    email: 'noreply@glue.gl'
+  locals: emailConfig.locals or {}
+  globalMergeVars:
+    site: site
+    private_profile: site.url
+    current_year: new Date().getFullYear()
+    links:
+      home: site.url + '/'
+  content: {}
+  mandrillTemplate: true
 
 userToMandrill = (user) ->
   _user =

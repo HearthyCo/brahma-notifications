@@ -3,24 +3,28 @@ config = require '../config/global'
 http = require 'http'
 
 # Sends an event to the pushd server.
-sendPush = (evt, payload) ->
+pushdPost = (path, payload, callback) ->
   data = JSON.stringify payload
   post_options =
     host: config.pushd.host
     port: config.pushd.port
-    path: '/event/' + evt
+    path: path
     method: 'POST'
     headers:
       'Content-Type': 'application/json'
 
   req = http.request post_options, (res) ->
-    if res.statusCode >= 400
-      console.log 'Error posting to postd:', res.statusCode, res.statusMessage
-      res.setEncoding 'utf8'
-      res.on 'data', (chunk) -> console.log chunk
+    str = ''
+    res.on 'data', (chunk) -> str += chunk
+    res.on 'end', ->
+      if res.statusCode >= 400
+        console.warn 'Error posting to postd:', res.statusCode, res.statusMessage
+        console.warn str
+      else
+        console.log 'Pushd:', path
+      callback JSON.parse str if callback
   req.write data
   req.end()
-
 
 exports = module.exports =
 
@@ -30,7 +34,7 @@ exports = module.exports =
     session = data.message.session
     for i in data.undelivered
       # TODO: Use translations instead of hardcoding everything.
-      sendPush i,
+      pushdPost '/event/' + i,
         'title': 'New message'
         'title.es': 'Nuevo mensaje'
         'msg': 'You have unread messages.'
@@ -43,10 +47,20 @@ exports = module.exports =
       data.sessionId, 'Users:', data.clients
     session = data.sessionId
     for i in data.clients
-      sendPush i,
+      pushdPost '/event/' + i,
         'title': 'Session finished'
         'title.es': 'Sesión finalizada'
         'msg': 'You have received your session report.'
         'msg.es': 'Has recibido el informe de tu sesión.'
         'data.type': 'finished'
         'data.session': ''+session
+
+  update: (data) ->
+    console.log 'Push subscriptions update:', data
+    pushdPost '/subscribers/', _.omit(data, 'uid'), (ret) ->
+      if data.uid
+        url = '/subscriber/' + ret.id + '/subscriptions'
+        payload = {}
+        payload[data.uid] = {}
+        pushdPost url, payload
+

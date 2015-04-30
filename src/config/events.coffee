@@ -15,6 +15,8 @@ events =
     activity: [ push.sendUndelivered ]
   session:
     finish: [ push.sendFinished ]
+  push:
+    update: [ push.update ]
 
 
 module.exports = exports = events

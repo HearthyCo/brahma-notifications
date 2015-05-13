@@ -14,11 +14,11 @@ config =
     exchange: 'amq.topic'
     keys: ['#']
   mandrill:
-    email: 'ignacio@glue.gl'
-    apikey: 'A6dtZPAhlL2K_VDtyyhYVQ'
+    email: 'thirdparty@hearthy.co'
+    apikey: 'Ep1eKCVtNM8p0PH_98AZGA'
   site:
     name: process.env.SITE_NAME or 'hearthy'
-    email: process.env.CONTACT_EMAIL or 'hola@glue.gl'
+    email: process.env.CONTACT_EMAIL or 'contact@hearthy.co'
     url: process.env.PUBLIC_URL or 'http://hearthy-client-dev.dev01.glue.gl'
     brand: process.env.BRAND or 'Hearthy'
   pushd:

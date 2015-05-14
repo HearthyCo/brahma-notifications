@@ -18,7 +18,8 @@ pushdPost = (path, payload, callback) ->
     res.on 'data', (chunk) -> str += chunk
     res.on 'end', ->
       if res.statusCode >= 400
-        console.warn 'Error posting to postd:', res.statusCode, res.statusMessage
+        console.warn 'Error posting to postd:', res.statusCode,
+          res.statusMessage
         console.warn str
       else
         console.log 'Pushd:', path

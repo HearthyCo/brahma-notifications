@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-
 require('better-console-log')()
+require('dotenv').load()
 
 amqp = require 'amqplib'
 all = (require 'when').all
@@ -12,6 +12,18 @@ email = require './lib/email'
 ###
   AMQP --------------------------------------------------------------
 ###
+amqpHandler = (msg) ->
+  key = msg.fields.routingKey
+
+  try data = JSON.parse msg.content.toString()
+  catch e then console.error e
+
+  console.log 'AMQP Received:', key
+
+  events = utils.resolve key, eventsList
+
+  ev data for ev in events if events?
+  console.warn key, 'does not exists in events' if not events?
 
 amqp.connect(config.amqp.url).then (conn) ->
   conn.createChannel().then (ch) ->
@@ -26,15 +38,3 @@ amqp.connect(config.amqp.url).then (conn) ->
     return ok.then -> console.info 'AMQP listening'
 .then null, console.error
 
-amqpHandler = (msg) ->
-  key = msg.fields.routingKey
-
-  try data = JSON.parse msg.content.toString()
-  catch e then console.error e
-
-  console.log 'AMQP Received:', key
-
-  events = utils.resolve key, eventsList
-
-  ev data for ev in events if events?
-  console.warn key, 'does not exists in events' if not events?

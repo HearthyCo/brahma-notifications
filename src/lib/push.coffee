@@ -49,10 +49,10 @@ exports = module.exports =
     session = data.sessionId
     for i in data.clients
       pushdPost '/event/' + i,
-        'title': 'Session finished'
-        'title.es': 'Sesión finalizada'
-        'msg': 'You have received your session report.'
-        'msg.es': 'Has recibido el informe de tu sesión.'
+        'title': 'Consultation finished'
+        'title.es': 'Consulta finalizada'
+        'msg': 'You have received your consultation report.'
+        'msg.es': 'Has recibido el informe de tu consulta.'
         'data.type': 'finished'
         'data.session': ''+session
 

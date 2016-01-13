@@ -1,7 +1,9 @@
 URL = require 'url'
 
 # AMQP
-amqp_env = process.env.AMQP_PORT or 'amqp://localhost:5672'
+amqp_env = process.env.RABBITMQ_URL or
+  process.env.AMQP_PORT or
+  'amqp://localhost:5672'
 amqp = URL.parse amqp_env, true
 
 # Protocol defaults to amqp:
@@ -22,7 +24,7 @@ config =
     url: process.env.PUBLIC_URL or ''
     brand: process.env.BRAND or ''
   pushd:
-    host: 'localhost'
+    host: '127.0.0.1'
     port: 2407
 
 module.exports = exports = config

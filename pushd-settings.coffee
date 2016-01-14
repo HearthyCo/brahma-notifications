@@ -23,15 +23,20 @@ exports['event-source'] =
   enabled: yes
 
 exports['apns'] =
-  enabled: no
-  #enabled: yes
+  enabled: yes
   class: require('./lib/pushservices/apns').PushServiceAPNS
-  #cert: '/mnt/pushd/cert.pem'
-  #key: '/mnt/pushd/key.pem'
   cacheLength: 100
   payloadFilter: ['messageFrom', 'news_id']
-  gateway: process.env['APN_PUSH_GATEWAY']
-  address: process.env['APN_FEEDBACK_ADDRESS']
+
+pemDir = '/app/certs/'
+if process.env.NODE_ENV is 'production'
+  exports.apns.cert = pemDir + 'cert-pro.pem'
+  exports.apns.key = pemDir + 'key-pro.pem'
+else
+  exports.apns.cert = pemDir + 'cert-dev.pem'
+  exports.apns.key = pemDir + 'key-dev.pem'
+  exports.apns.gateway = 'gateway.sandbox.push.apple.com'
+  exports.apns.address = 'feedback.sandbox.push.apple.com'
 
 exports['gcm'] =
   enabled: yes

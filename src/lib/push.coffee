@@ -42,6 +42,7 @@ exports = module.exports =
         'msg.es': 'Tienes mensajes sin leer.'
         'data.type': 'message'
         'data.session': ''+session
+        'badge': 1
 
   sendFinished: (data) ->
     console.log 'Session finished; Session:',

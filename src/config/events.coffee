@@ -13,6 +13,7 @@ events =
     confirmPassword: [ email.send emailEvents.confirmPassword ]
   chat:
     activity: [ push.sendUndelivered ]
+    unread: [ push.sendUnread ]
   session:
     finish: [ push.sendFinished ]
   push:

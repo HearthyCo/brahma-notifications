@@ -66,3 +66,10 @@ exports = module.exports =
         payload[data.uid] = {}
         pushdPost url, payload
 
+  sendUnread: (data) ->
+    pushdPost '/event/' + data.user,
+      'title': 'You have unread messages'
+      'title.es': 'Tienes mensajes sin leer'
+      'msg': 'Don\'t forget to check your message log.'
+      'msg.es': 'No olvides consultar tu historial de mensajes.'
+      'data.type': 'message'

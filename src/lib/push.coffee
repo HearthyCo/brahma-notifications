@@ -69,6 +69,6 @@ exports = module.exports =
     pushdPost '/event/' + data.user,
       'title': 'You have unread messages'
       'title.es': 'Tienes mensajes sin leer'
-      'msg': 'Don\'t forget to check your message log.'
-      'msg.es': 'No olvides consultar tu historial de mensajes.'
+      'msg': 'You have unread messages.'
+      'msg.es': 'Tienes mensajes no leídos.'
       'data.type': 'message'
